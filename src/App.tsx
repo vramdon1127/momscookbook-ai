@@ -8,6 +8,9 @@ import TopNavigation from "@/components/TopNavigation";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
+import Community from "./pages/Community";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,10 +34,10 @@ const App = () => (
                 <Route path="/recipes" element={<Index />} />
                 <Route path="/meal-planner" element={<Index />} />
                 <Route path="/cookbooks" element={<Index />} />
-                <Route path="/community" element={<Index />} />
+                <Route path="/community" element={<Community />} />
                 <Route path="/search" element={<Index />} />
-                <Route path="/profile" element={<Dashboard />} />
-                <Route path="/settings" element={<Dashboard />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/settings" element={<Settings />} />
                 <Route path="/premium" element={<Dashboard />} />
                 <Route path="/help/*" element={<Dashboard />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

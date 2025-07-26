@@ -15,7 +15,8 @@ import {
   Sparkles,
   Crown,
   Play,
-  Clock
+  Clock,
+  Home
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -139,7 +140,11 @@ const Dashboard = () => {
                   Premium
                 </Badge>
               )}
-              <Button onClick={() => navigate('/create-recipe')} className="gap-2">
+              <Button variant="outline" onClick={() => navigate('/')} className="gap-2">
+                <Home className="w-4 h-4" />
+                Back to Home
+              </Button>
+              <Button onClick={() => navigate('/')} className="gap-2">
                 <PlusCircle className="w-4 h-4" />
                 Add Recipe
               </Button>

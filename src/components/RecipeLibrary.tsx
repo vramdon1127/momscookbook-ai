@@ -35,26 +35,25 @@ export const RecipeLibrary = ({ recipes, onNewRecording }: RecipeLibraryProps) =
   if (recipes.length === 0) {
     return (
       <div className="w-full max-w-4xl mx-auto p-6">
-        <div className="text-center space-y-6">
-          <div className="space-y-2">
-            <ChefHat className="w-16 h-16 text-primary mx-auto" />
-            <h2 className="text-2xl font-bold">Your Recipe Collection</h2>
-            <p className="text-muted-foreground max-w-md mx-auto">
-              Start building your family recipe collection by recording your mom's cooking wisdom
+        <div className="text-center space-y-8">
+          <div className="space-y-3">
+            <ChefHat className="w-8 h-8 text-primary mx-auto" />
+            <h2 className="text-xl font-semibold">Recipe Collection</h2>
+            <p className="text-muted-foreground max-w-sm mx-auto text-sm">
+              Build your recipe collection by recording cooking processes
             </p>
           </div>
           
-          <Card className="p-8 bg-gradient-subtle max-w-md mx-auto">
-            <div className="space-y-4">
-              <Heart className="w-12 h-12 text-destructive mx-auto" />
+          <Card className="p-8 bg-muted/30 max-w-sm mx-auto border">
+            <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-semibold">Preserve Family Traditions</h3>
+                <h3 className="text-base font-medium">Get Started</h3>
                 <p className="text-sm text-muted-foreground mt-2">
-                  Capture the stories, techniques, and love that make your mom's recipes special
+                  Record cooking processes and transform them into structured recipes
                 </p>
               </div>
-              <Button onClick={onNewRecording} variant="warm" className="w-full">
-                Record Your First Recipe
+              <Button onClick={onNewRecording} variant="default" className="w-full">
+                Start Recording
               </Button>
             </div>
           </Card>
@@ -78,7 +77,7 @@ export const RecipeLibrary = ({ recipes, onNewRecording }: RecipeLibraryProps) =
 
         <div className="space-y-6">
           {/* Recipe Header */}
-          <Card className="p-6 bg-gradient-subtle">
+          <Card className="p-6 bg-muted/20 border">
             <div className="space-y-3">
               <h1 className="text-3xl font-bold">{selectedRecipe.title}</h1>
               <p className="text-muted-foreground">{selectedRecipe.description}</p>
@@ -132,12 +131,11 @@ export const RecipeLibrary = ({ recipes, onNewRecording }: RecipeLibraryProps) =
 
           {/* Notes */}
           {selectedRecipe.notes && (
-            <Card className="p-6 bg-accent/20">
-              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Heart className="w-5 h-5 text-destructive" />
-                Mom's Special Notes
+            <Card className="p-6 bg-muted/30 border">
+              <h2 className="text-lg font-medium mb-4">
+                Notes
               </h2>
-              <p className="leading-relaxed italic">{selectedRecipe.notes}</p>
+              <p className="leading-relaxed text-muted-foreground">{selectedRecipe.notes}</p>
             </Card>
           )}
         </div>
@@ -153,9 +151,9 @@ export const RecipeLibrary = ({ recipes, onNewRecording }: RecipeLibraryProps) =
           <h2 className="text-2xl font-bold">Recipe Collection</h2>
           <p className="text-muted-foreground">{recipes.length} family recipes preserved</p>
         </div>
-        <Button onClick={onNewRecording} variant="warm">
+        <Button onClick={onNewRecording} variant="default">
           <ChefHat className="w-4 h-4 mr-2" />
-          Record New Recipe
+          New Recipe
         </Button>
       </div>
 
@@ -175,7 +173,7 @@ export const RecipeLibrary = ({ recipes, onNewRecording }: RecipeLibraryProps) =
         {filteredRecipes.map((recipe, index) => (
           <Card 
             key={index}
-            className="p-6 hover:shadow-warm transition-all duration-300 cursor-pointer group"
+            className="p-6 hover:shadow-medium transition-all duration-200 cursor-pointer group border"
             onClick={() => setSelectedRecipe(recipe)}
           >
             <div className="space-y-4">

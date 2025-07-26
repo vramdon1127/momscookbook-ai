@@ -93,12 +93,11 @@ export default {
 				'pulse-warm': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
 			},
 			backgroundImage: {
-				'gradient-warm': 'var(--gradient-warm)',
 				'gradient-subtle': 'var(--gradient-subtle)'
 			},
 			boxShadow: {
-				'warm': 'var(--shadow-warm)',
-				'glow': 'var(--shadow-glow)'
+				'subtle': 'var(--shadow-subtle)',
+				'medium': 'var(--shadow-medium)'
 			},
 			fontFamily: {
 				'handwriting': ['Caveat', 'cursive'],

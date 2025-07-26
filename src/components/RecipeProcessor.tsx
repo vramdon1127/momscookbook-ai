@@ -85,16 +85,16 @@ export const RecipeProcessor = ({ recording, onSave, onNewRecording }: RecipePro
     setIsProcessing(false);
     
     toast({
-      title: "Recipe Extracted! ✨",
-      description: "AI has analyzed the cooking video and extracted the recipe",
+      title: "Recipe Extracted",
+      description: "AI has analyzed the video and extracted the recipe",
     });
   };
 
   const handleSave = () => {
     onSave(recipe);
     toast({
-      title: "Recipe Saved! 💝",
-      description: "Mom's recipe has been preserved for future generations",
+      title: "Recipe Saved",
+      description: "Recipe has been saved to your collection",
     });
   };
 
@@ -143,7 +143,7 @@ Duration: ${Math.floor(recording.duration / 60)}:${(recording.duration % 60).toS
 
       {/* Processing Status */}
       {!recipe.title && !manualMode && (
-        <Card className="p-8 text-center bg-gradient-subtle">
+        <Card className="p-8 text-center bg-muted/20 border">
           {!isProcessing ? (
             <div className="space-y-4">
               <Brain className="w-16 h-16 text-primary mx-auto" />
@@ -153,7 +153,7 @@ Duration: ${Math.floor(recording.duration / 60)}:${(recording.duration % 60).toS
                   Our AI will analyze the video and audio to create a detailed recipe
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <Button onClick={processRecording} variant="warm" size="lg">
+                  <Button onClick={processRecording} variant="default" size="lg">
                     <Sparkles className="w-5 h-5 mr-2" />
                     Extract Recipe with AI
                   </Button>
@@ -281,7 +281,7 @@ Duration: ${Math.floor(recording.duration / 60)}:${(recording.duration % 60).toS
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button onClick={handleSave} variant="warm" size="lg">
+            <Button onClick={handleSave} variant="default" size="lg">
               <Save className="w-5 h-5 mr-2" />
               Save Recipe
             </Button>

@@ -50,8 +50,8 @@ export const CookingRecorder = ({ onRecordingComplete }: { onRecordingComplete: 
       setHasPermissions(true);
       
       toast({
-        title: "Camera Ready! 📹",
-        description: "Ready to capture mom's cooking wisdom",
+        title: "Camera Ready",
+        description: "Ready to record cooking process",
       });
     } catch (error) {
       toast({
@@ -97,8 +97,8 @@ export const CookingRecorder = ({ onRecordingComplete }: { onRecordingComplete: 
     }, 1000);
 
     toast({
-      title: "Recording Started! 🎬",
-      description: "Capturing the magic of cooking",
+      title: "Recording Started",
+      description: "Capturing cooking process",
     });
   }, [recordingState.duration, onRecordingComplete, toast]);
 
@@ -112,8 +112,8 @@ export const CookingRecorder = ({ onRecordingComplete }: { onRecordingComplete: 
       }
 
       toast({
-        title: "Recording Complete! ✨",
-        description: "Processing your mom's recipe...",
+        title: "Recording Complete",
+        description: "Processing recipe data...",
       });
     }
   }, [recordingState.isRecording, toast]);
@@ -127,21 +127,20 @@ export const CookingRecorder = ({ onRecordingComplete }: { onRecordingComplete: 
   return (
     <div className="w-full max-w-4xl mx-auto p-6 space-y-6">
       {/* Header */}
-      <div className="text-center space-y-2">
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <ChefHat className="w-8 h-8 text-primary" />
-          <Heart className="w-6 h-6 text-destructive" />
+      <div className="text-center space-y-4">
+        <div className="flex items-center justify-center gap-3 mb-2">
+          <ChefHat className="w-6 h-6 text-primary" />
         </div>
-        <h1 className="text-3xl font-bold bg-gradient-warm bg-clip-text text-transparent">
-          Mom's Recipe Keeper
+        <h1 className="text-2xl font-semibold text-foreground">
+          Recipe Recorder
         </h1>
-        <p className="text-muted-foreground">
-          Capture the love, preserve the tradition
+        <p className="text-muted-foreground text-sm max-w-md mx-auto">
+          Capture cooking processes and transform them into structured recipes
         </p>
       </div>
 
       {/* Video Preview */}
-      <Card className="relative overflow-hidden bg-gradient-subtle shadow-warm">
+      <Card className="relative overflow-hidden border shadow-subtle">
         <div className="aspect-video bg-muted/20 flex items-center justify-center">
           {hasPermissions ? (
             <video
@@ -194,9 +193,9 @@ export const CookingRecorder = ({ onRecordingComplete }: { onRecordingComplete: 
       {/* Controls */}
       <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
         {!hasPermissions ? (
-          <Button 
+            <Button 
             onClick={requestPermissions}
-            variant="warm"
+            variant="default"
             size="lg"
             className="px-8"
           >
@@ -208,7 +207,7 @@ export const CookingRecorder = ({ onRecordingComplete }: { onRecordingComplete: 
             {!recordingState.isRecording ? (
               <Button 
                 onClick={startRecording}
-                variant="record"
+                variant="destructive"
                 size="lg"
                 className="px-8"
               >
@@ -232,18 +231,18 @@ export const CookingRecorder = ({ onRecordingComplete }: { onRecordingComplete: 
 
       {/* Instructions */}
       {hasPermissions && !recordingState.isRecording && (
-        <Card className="p-6 bg-gradient-subtle">
-          <h3 className="font-semibold mb-3 text-center">Recording Tips 💡</h3>
-          <div className="grid sm:grid-cols-2 gap-4 text-sm text-muted-foreground">
-            <div className="space-y-2">
-              <p>• Position camera to see the cooking area clearly</p>
-              <p>• Ask mom to describe what she's doing step by step</p>
-              <p>• Capture ingredient measurements and techniques</p>
+        <Card className="p-6 bg-muted/50 border">
+          <h3 className="font-medium mb-4 text-center">Recording Guidelines</h3>
+          <div className="grid sm:grid-cols-2 gap-6 text-sm text-muted-foreground">
+            <div className="space-y-3">
+              <p>• Position camera clearly</p>
+              <p>• Describe each step</p>
+              <p>• Include measurements</p>
             </div>
-            <div className="space-y-2">
-              <p>• Record the full cooking process from start to finish</p>
-              <p>• Don't worry about pauses - they add charm!</p>
-              <p>• Focus on the love and stories behind the recipe</p>
+            <div className="space-y-3">
+              <p>• Record full process</p>
+              <p>• Speak clearly</p>
+              <p>• Include techniques</p>
             </div>
           </div>
         </Card>

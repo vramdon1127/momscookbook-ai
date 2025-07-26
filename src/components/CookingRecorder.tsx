@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Video, VideoOff, Mic, MicOff, Square, Play, ChefHat, Heart } from 'lucide-react';
+import { Video, VideoOff, Mic, MicOff, Square, Play, ChefHat, Pause } from 'lucide-react';
 
 interface RecordingState {
   isRecording: boolean;
+  isPaused: boolean;
   duration: number;
   videoBlob: Blob | null;
   audioBlob: Blob | null;
@@ -16,6 +17,7 @@ export const CookingRecorder = ({ onRecordingComplete }: { onRecordingComplete: 
   const { toast } = useToast();
   const [recordingState, setRecordingState] = useState<RecordingState>({
     isRecording: false,
+    isPaused: false,
     duration: 0,
     videoBlob: null,
     audioBlob: null,
@@ -89,11 +91,13 @@ export const CookingRecorder = ({ onRecordingComplete }: { onRecordingComplete: 
     };
 
     mediaRecorder.start();
-    setRecordingState(prev => ({ ...prev, isRecording: true, duration: 0 }));
+    setRecordingState(prev => ({ ...prev, isRecording: true, isPaused: false, duration: 0 }));
 
     // Start duration timer
     intervalRef.current = setInterval(() => {
-      setRecordingState(prev => ({ ...prev, duration: prev.duration + 1 }));
+      setRecordingState(prev => 
+        prev.isPaused ? prev : { ...prev, duration: prev.duration + 1 }
+      );
     }, 1000);
 
     toast({
@@ -105,7 +109,7 @@ export const CookingRecorder = ({ onRecordingComplete }: { onRecordingComplete: 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && recordingState.isRecording) {
       mediaRecorderRef.current.stop();
-      setRecordingState(prev => ({ ...prev, isRecording: false }));
+      setRecordingState(prev => ({ ...prev, isRecording: false, isPaused: false }));
       
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -117,6 +121,30 @@ export const CookingRecorder = ({ onRecordingComplete }: { onRecordingComplete: 
       });
     }
   }, [recordingState.isRecording, toast]);
+
+  const pauseRecording = useCallback(() => {
+    if (mediaRecorderRef.current && recordingState.isRecording && !recordingState.isPaused) {
+      mediaRecorderRef.current.pause();
+      setRecordingState(prev => ({ ...prev, isPaused: true }));
+      
+      toast({
+        title: "Recording Paused",
+        description: "Click resume to continue recording",
+      });
+    }
+  }, [recordingState.isRecording, recordingState.isPaused, toast]);
+
+  const resumeRecording = useCallback(() => {
+    if (mediaRecorderRef.current && recordingState.isRecording && recordingState.isPaused) {
+      mediaRecorderRef.current.resume();
+      setRecordingState(prev => ({ ...prev, isPaused: false }));
+      
+      toast({
+        title: "Recording Resumed",
+        description: "Continuing to capture cooking process",
+      });
+    }
+  }, [recordingState.isRecording, recordingState.isPaused, toast]);
 
   const formatDuration = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -166,9 +194,9 @@ export const CookingRecorder = ({ onRecordingComplete }: { onRecordingComplete: 
         {/* Recording Overlay */}
         {recordingState.isRecording && (
           <div className="absolute top-4 left-4 flex items-center gap-2">
-            <div className="w-3 h-3 bg-destructive rounded-full animate-pulse" />
-            <Badge variant="destructive" className="bg-destructive/90">
-              REC {formatDuration(recordingState.duration)}
+            <div className={`w-3 h-3 rounded-full ${recordingState.isPaused ? 'bg-yellow-500' : 'bg-destructive animate-pulse'}`} />
+            <Badge variant={recordingState.isPaused ? "secondary" : "destructive"} className={recordingState.isPaused ? "bg-yellow-500/20 text-yellow-700" : "bg-destructive/90"}>
+              {recordingState.isPaused ? 'PAUSED' : 'REC'} {formatDuration(recordingState.duration)}
             </Badge>
           </div>
         )}
@@ -215,15 +243,38 @@ export const CookingRecorder = ({ onRecordingComplete }: { onRecordingComplete: 
                 Start Recording
               </Button>
             ) : (
-              <Button 
-                onClick={stopRecording}
-                variant="destructive"
-                size="lg"
-                className="px-8"
-              >
-                <Square className="w-5 h-5 mr-2" />
-                Stop Recording
-              </Button>
+              <div className="flex gap-3">
+                {!recordingState.isPaused ? (
+                  <Button 
+                    onClick={pauseRecording}
+                    variant="secondary"
+                    size="lg"
+                    className="px-6"
+                  >
+                    <Pause className="w-5 h-5 mr-2" />
+                    Pause
+                  </Button>
+                ) : (
+                  <Button 
+                    onClick={resumeRecording}
+                    variant="destructive"
+                    size="lg"
+                    className="px-6"
+                  >
+                    <Play className="w-5 h-5 mr-2" />
+                    Resume
+                  </Button>
+                )}
+                <Button 
+                  onClick={stopRecording}
+                  variant="outline"
+                  size="lg"
+                  className="px-6"
+                >
+                  <Square className="w-5 h-5 mr-2" />
+                  Stop & Process
+                </Button>
+              </div>
             )}
           </>
         )}
@@ -238,13 +289,27 @@ export const CookingRecorder = ({ onRecordingComplete }: { onRecordingComplete: 
               <p>• Position camera clearly</p>
               <p>• Describe each step</p>
               <p>• Include measurements</p>
+              <p>• Use pause if you need breaks</p>
             </div>
             <div className="space-y-3">
               <p>• Record full process</p>
               <p>• Speak clearly</p>
               <p>• Include techniques</p>
+              <p>• AI will piece segments together</p>
             </div>
           </div>
+        </Card>
+      )}
+
+      {/* Pause Instructions */}
+      {recordingState.isRecording && (
+        <Card className="p-4 bg-muted/30 border text-center">
+          <p className="text-sm text-muted-foreground">
+            {recordingState.isPaused 
+              ? "Recording is paused. Resume when ready to continue."
+              : "Feel free to pause if you need a break. The AI will seamlessly combine all segments."
+            }
+          </p>
         </Card>
       )}
     </div>

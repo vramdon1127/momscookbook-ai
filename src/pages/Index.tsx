@@ -118,26 +118,6 @@ const Index = () => {
   // Landing page for non-authenticated users
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <ChefHat className="w-8 h-8 text-primary" />
-              <span className="text-xl font-bold">Recipe Legacy</span>
-            </div>
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" onClick={() => navigate('/auth')}>
-                Sign In
-              </Button>
-              <Button onClick={() => navigate('/auth')}>
-                Get Started
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <section className="relative py-20 px-4 overflow-hidden">
         <div className="max-w-6xl mx-auto">

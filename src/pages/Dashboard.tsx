@@ -120,39 +120,6 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <ChefHat className="w-8 h-8 text-primary" />
-              <div>
-                <h1 className="text-2xl font-bold">Recipe Legacy</h1>
-                <p className="text-sm text-muted-foreground">
-                  Welcome back, {profile?.full_name || 'Chef'}!
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              {profile?.subscription_tier === 'premium' && (
-                <Badge variant="secondary" className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-700 border-yellow-500/30">
-                  <Crown className="w-3 h-3 mr-1" />
-                  Premium
-                </Badge>
-              )}
-              <Button variant="outline" onClick={() => navigate('/')} className="gap-2">
-                <Home className="w-4 h-4" />
-                Back to Home
-              </Button>
-              <Button onClick={() => navigate('/')} className="gap-2">
-                <PlusCircle className="w-4 h-4" />
-                Add Recipe
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
         {/* Weekly Prompt */}
         {currentPrompt && (

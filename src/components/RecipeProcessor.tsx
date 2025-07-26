@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Brain, Download, Save, Clock, Users, Sparkles } from 'lucide-react';
+import { Brain, Download, Save, Clock, Users, Sparkles, Play, BookOpen, ShoppingCart } from 'lucide-react';
 
 interface Recipe {
   title: string;
@@ -43,6 +43,7 @@ export const RecipeProcessor = ({ recording, onSave, onNewRecording, onBack }: R
     notes: ''
   });
   const [manualMode, setManualMode] = useState(false);
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
 
   // Simulated AI processing - In real implementation, this would call actual AI services
   const processRecording = async () => {
@@ -83,16 +84,26 @@ export const RecipeProcessor = ({ recording, onSave, onNewRecording, onBack }: R
     };
     
     setRecipe(mockRecipe);
+    
+    // Create video URL for playback
+    const url = URL.createObjectURL(recording.videoBlob);
+    setVideoUrl(url);
+    
     setIsProcessing(false);
     
     toast({
       title: "Recipe Extracted",
-      description: "AI has analyzed the video and extracted the recipe",
+      description: "Video has been analyzed and recipe extracted",
     });
   };
 
   const handleSave = () => {
-    onSave(recipe);
+    // Store video URL with recipe for future viewing
+    const recipeWithVideo = {
+      ...recipe,
+      videoUrl: videoUrl
+    };
+    onSave(recipeWithVideo);
     toast({
       title: "Recipe Saved",
       description: "Recipe has been saved to your collection",
@@ -158,12 +169,12 @@ Duration: ${Math.floor(recording.duration / 60)}:${(recording.duration % 60).toS
               <div>
                 <h3 className="text-lg font-semibold mb-2">Ready to Extract Recipe</h3>
                 <p className="text-muted-foreground mb-4">
-                  AI will analyze the video and audio to create a detailed recipe. You can edit everything afterward.
+                  Analyze the video and audio to create a detailed recipe. You can edit everything afterward.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Button onClick={processRecording} variant="default" size="lg">
                     <Sparkles className="w-5 h-5 mr-2" />
-                    Extract Recipe with AI
+                    Extract Recipe
                   </Button>
                   <Button onClick={() => setManualMode(true)} variant="outline">
                     Create Recipe Manually
@@ -192,7 +203,7 @@ Duration: ${Math.floor(recording.duration / 60)}:${(recording.duration % 60).toS
           <div className="text-center pb-4 border-b">
             <h3 className="text-lg font-semibold">Edit & Refine Your Recipe</h3>
             <p className="text-sm text-muted-foreground mt-1">
-              Review and modify the AI-generated recipe as needed
+              Review and modify the extracted recipe as needed
             </p>
           </div>
           <Card className="p-6">
@@ -297,19 +308,60 @@ Duration: ${Math.floor(recording.duration / 60)}:${(recording.duration % 60).toS
             />
           </Card>
 
+          {/* Video Playback */}
+          {videoUrl && (
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold mb-4">Cooking Video</h3>
+              <div className="aspect-video bg-muted/20 rounded-lg overflow-hidden">
+                <video
+                  src={videoUrl}
+                  controls
+                  className="w-full h-full object-cover"
+                >
+                  Your browser does not support video playback.
+                </video>
+              </div>
+            </Card>
+          )}
+
           {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 border-t">
-            <Button onClick={handleSave} variant="default" size="lg" className="min-w-32">
-              <Save className="w-5 h-5 mr-2" />
-              Save Recipe
-            </Button>
-            <Button onClick={downloadRecipe} variant="outline" size="lg" className="min-w-32">
-              <Download className="w-5 h-5 mr-2" />
-              Download
-            </Button>
-            <Button onClick={onNewRecording} variant="ghost" className="min-w-32">
-              New Recording
-            </Button>
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 border-t">
+              <Button onClick={handleSave} variant="default" size="lg" className="min-w-32">
+                <Save className="w-5 h-5 mr-2" />
+                Save Recipe
+              </Button>
+              <Button onClick={downloadRecipe} variant="outline" size="lg" className="min-w-32">
+                <Download className="w-5 h-5 mr-2" />
+                Download
+              </Button>
+              <Button onClick={onNewRecording} variant="ghost" className="min-w-32">
+                New Recording
+              </Button>
+            </div>
+            
+            {/* Cookbook Options */}
+            <Card className="p-6 bg-muted/20 border">
+              <div className="text-center space-y-4">
+                <div className="flex items-center justify-center gap-2">
+                  <BookOpen className="w-5 h-5 text-primary" />
+                  <h4 className="font-semibold">Create a Family Cookbook</h4>
+                </div>
+                <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                  Combine your recipes into a beautiful printed cookbook. Perfect for sharing with family and friends.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <Button variant="outline" size="lg">
+                    <BookOpen className="w-5 h-5 mr-2" />
+                    Create Cookbook
+                  </Button>
+                  <Button variant="outline" size="lg">
+                    <ShoppingCart className="w-5 h-5 mr-2" />
+                    Order Copies
+                  </Button>
+                </div>
+              </div>
+            </Card>
           </div>
         </div>
       )}

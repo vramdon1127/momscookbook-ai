@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Clock, Users, Search, Heart, Calendar, ChefHat } from 'lucide-react';
+import { Clock, Users, Search, Calendar, ChefHat, Play, BookOpen, ShoppingCart } from 'lucide-react';
 
 interface Recipe {
   title: string;
@@ -15,6 +15,7 @@ interface Recipe {
   servings: string;
   notes: string;
   dateCreated?: string;
+  videoUrl?: string;
 }
 
 interface RecipeLibraryProps {
@@ -129,6 +130,25 @@ export const RecipeLibrary = ({ recipes, onNewRecording }: RecipeLibraryProps) =
             </Card>
           </div>
 
+          {/* Video Section */}
+          {selectedRecipe.videoUrl && (
+            <Card className="p-6 border">
+              <h2 className="text-lg font-medium mb-4 flex items-center gap-2">
+                <Play className="w-5 h-5 text-primary" />
+                Cooking Video
+              </h2>
+              <div className="aspect-video bg-muted/20 rounded-lg overflow-hidden">
+                <video
+                  src={selectedRecipe.videoUrl}
+                  controls
+                  className="w-full h-full object-cover"
+                >
+                  Your browser does not support video playback.
+                </video>
+              </div>
+            </Card>
+          )}
+
           {/* Notes */}
           {selectedRecipe.notes && (
             <Card className="p-6 bg-muted/30 border">
@@ -138,6 +158,29 @@ export const RecipeLibrary = ({ recipes, onNewRecording }: RecipeLibraryProps) =
               <p className="leading-relaxed text-muted-foreground">{selectedRecipe.notes}</p>
             </Card>
           )}
+
+          {/* Cookbook Options */}
+          <Card className="p-6 bg-muted/20 border">
+            <div className="text-center space-y-4">
+              <div className="flex items-center justify-center gap-2">
+                <BookOpen className="w-5 h-5 text-primary" />
+                <h3 className="font-semibold">Share This Recipe</h3>
+              </div>
+              <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                Add this recipe to a family cookbook or order printed copies for loved ones.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button variant="outline">
+                  <BookOpen className="w-4 h-4 mr-2" />
+                  Add to Cookbook
+                </Button>
+                <Button variant="outline">
+                  <ShoppingCart className="w-4 h-4 mr-2" />
+                  Order Copies
+                </Button>
+              </div>
+            </div>
+          </Card>
         </div>
       </div>
     );
@@ -195,6 +238,12 @@ export const RecipeLibrary = ({ recipes, onNewRecording }: RecipeLibraryProps) =
                   <Users className="w-3 h-3 mr-1" />
                   {recipe.servings}
                 </Badge>
+                {recipe.videoUrl && (
+                  <Badge variant="outline" className="text-xs">
+                    <Play className="w-3 h-3 mr-1" />
+                    Video
+                  </Badge>
+                )}
               </div>
 
               <div className="text-xs text-muted-foreground">
@@ -213,6 +262,31 @@ export const RecipeLibrary = ({ recipes, onNewRecording }: RecipeLibraryProps) =
             Try searching for different ingredients or recipe names
           </p>
         </div>
+      )}
+
+      {/* Cookbook Creation */}
+      {recipes.length > 0 && (
+        <Card className="p-8 bg-muted/20 border mt-8">
+          <div className="text-center space-y-4">
+            <div className="flex items-center justify-center gap-2">
+              <BookOpen className="w-6 h-6 text-primary" />
+              <h3 className="text-xl font-semibold">Create Your Family Cookbook</h3>
+            </div>
+            <p className="text-muted-foreground max-w-lg mx-auto">
+              Transform your recipe collection into a beautiful printed cookbook. Perfect for preserving family traditions and sharing with loved ones.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button variant="default" size="lg">
+                <BookOpen className="w-5 h-5 mr-2" />
+                Create Cookbook ({recipes.length} recipes)
+              </Button>
+              <Button variant="outline" size="lg">
+                <ShoppingCart className="w-5 h-5 mr-2" />
+                Order Printed Copies
+              </Button>
+            </div>
+          </div>
+        </Card>
       )}
     </div>
   );

@@ -13,6 +13,7 @@ interface Recipe {
   servings: string;
   notes: string;
   dateCreated?: string;
+  videoUrl?: string;
 }
 
 type AppState = 'library' | 'recording' | 'processing';

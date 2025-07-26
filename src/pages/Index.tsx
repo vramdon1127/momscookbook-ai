@@ -42,6 +42,14 @@ const Index = () => {
     setCurrentRecording(null);
   };
 
+  const goBackToLibrary = () => {
+    setAppState('library');
+  };
+
+  const goBackToRecording = () => {
+    setAppState('recording');
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {appState === 'library' && (
@@ -54,6 +62,7 @@ const Index = () => {
       {appState === 'recording' && (
         <CookingRecorder
           onRecordingComplete={handleRecordingComplete}
+          onBack={goBackToLibrary}
         />
       )}
       
@@ -62,6 +71,7 @@ const Index = () => {
           recording={currentRecording}
           onSave={handleRecipeSave}
           onNewRecording={startNewRecording}
+          onBack={goBackToRecording}
         />
       )}
     </div>

@@ -13,7 +13,10 @@ interface RecordingState {
   audioBlob: Blob | null;
 }
 
-export const CookingRecorder = ({ onRecordingComplete }: { onRecordingComplete: (recording: any) => void }) => {
+export const CookingRecorder = ({ onRecordingComplete, onBack }: { 
+  onRecordingComplete: (recording: any) => void;
+  onBack: () => void;
+}) => {
   const { toast } = useToast();
   const [recordingState, setRecordingState] = useState<RecordingState>({
     isRecording: false,
@@ -154,6 +157,13 @@ export const CookingRecorder = ({ onRecordingComplete }: { onRecordingComplete: 
 
   return (
     <div className="w-full max-w-4xl mx-auto p-6 space-y-6">
+      {/* Back Navigation */}
+      <div className="flex items-center justify-between">
+        <Button onClick={onBack} variant="ghost" className="flex items-center gap-2">
+          ← Back to Library
+        </Button>
+      </div>
+
       {/* Header */}
       <div className="text-center space-y-4">
         <div className="flex items-center justify-center gap-3 mb-2">

@@ -26,9 +26,10 @@ interface RecipeProcessorProps {
   };
   onSave: (recipe: Recipe) => void;
   onNewRecording: () => void;
+  onBack: () => void;
 }
 
-export const RecipeProcessor = ({ recording, onSave, onNewRecording }: RecipeProcessorProps) => {
+export const RecipeProcessor = ({ recording, onSave, onNewRecording, onBack }: RecipeProcessorProps) => {
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
   const [recipe, setRecipe] = useState<Recipe>({
@@ -133,6 +134,13 @@ Duration: ${Math.floor(recording.duration / 60)}:${(recording.duration % 60).toS
 
   return (
     <div className="w-full max-w-4xl mx-auto p-6 space-y-6">
+      {/* Back Navigation */}
+      <div className="flex items-center justify-between">
+        <Button onClick={onBack} variant="ghost" className="flex items-center gap-2">
+          ← Back to Recording
+        </Button>
+      </div>
+
       {/* Header */}
       <div className="text-center space-y-2">
         <h2 className="text-2xl font-bold">Recipe Processing</h2>
@@ -150,7 +158,7 @@ Duration: ${Math.floor(recording.duration / 60)}:${(recording.duration % 60).toS
               <div>
                 <h3 className="text-lg font-semibold mb-2">Ready to Extract Recipe</h3>
                 <p className="text-muted-foreground mb-4">
-                  Our AI will analyze the video and audio to create a detailed recipe
+                  AI will analyze the video and audio to create a detailed recipe. You can edit everything afterward.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Button onClick={processRecording} variant="default" size="lg">
@@ -180,6 +188,13 @@ Duration: ${Math.floor(recording.duration / 60)}:${(recording.duration % 60).toS
       {/* Recipe Editor */}
       {(recipe.title || manualMode) && (
         <div className="space-y-6">
+          {/* Edit Header */}
+          <div className="text-center pb-4 border-b">
+            <h3 className="text-lg font-semibold">Edit & Refine Your Recipe</h3>
+            <p className="text-sm text-muted-foreground mt-1">
+              Review and modify the AI-generated recipe as needed
+            </p>
+          </div>
           <Card className="p-6">
             <div className="space-y-4">
               <div>
@@ -242,13 +257,14 @@ Duration: ${Math.floor(recording.duration / 60)}:${(recording.duration % 60).toS
             {/* Ingredients */}
             <Card className="p-6">
               <h3 className="text-lg font-semibold mb-4">Ingredients</h3>
+              <p className="text-xs text-muted-foreground mb-3">Enter each ingredient on a new line</p>
               <Textarea
                 value={recipe.ingredients.join('\n')}
                 onChange={(e) => setRecipe(prev => ({ 
                   ...prev, 
                   ingredients: e.target.value.split('\n').filter(line => line.trim()) 
                 }))}
-                placeholder="Enter each ingredient on a new line..."
+                placeholder="2 lbs fresh tomatoes, diced&#10;1 large onion, finely chopped&#10;4 cloves garlic, minced..."
                 className="min-h-[200px]"
               />
             </Card>
@@ -256,13 +272,14 @@ Duration: ${Math.floor(recording.duration / 60)}:${(recording.duration % 60).toS
             {/* Instructions */}
             <Card className="p-6">
               <h3 className="text-lg font-semibold mb-4">Instructions</h3>
+              <p className="text-xs text-muted-foreground mb-3">Enter each step on a new line</p>
               <Textarea
                 value={recipe.instructions.join('\n')}
                 onChange={(e) => setRecipe(prev => ({ 
                   ...prev, 
                   instructions: e.target.value.split('\n').filter(line => line.trim()) 
                 }))}
-                placeholder="Enter each step on a new line..."
+                placeholder="Heat olive oil in a large pan over medium heat&#10;Add chopped onions and cook until translucent..."
                 className="min-h-[200px]"
               />
             </Card>
@@ -271,26 +288,27 @@ Duration: ${Math.floor(recording.duration / 60)}:${(recording.duration % 60).toS
           {/* Notes */}
           <Card className="p-6">
             <h3 className="text-lg font-semibold mb-4">Special Notes & Tips</h3>
+            <p className="text-xs text-muted-foreground mb-3">Add any special tips, stories, or variations</p>
             <Textarea
               value={recipe.notes}
               onChange={(e) => setRecipe(prev => ({ ...prev, notes: e.target.value }))}
-              placeholder="Any special tips, stories, or variations..."
+              placeholder="Any special tips, family secrets, or variations..."
               className="min-h-[100px]"
             />
           </Card>
 
           {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button onClick={handleSave} variant="default" size="lg">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 border-t">
+            <Button onClick={handleSave} variant="default" size="lg" className="min-w-32">
               <Save className="w-5 h-5 mr-2" />
               Save Recipe
             </Button>
-            <Button onClick={downloadRecipe} variant="outline" size="lg">
+            <Button onClick={downloadRecipe} variant="outline" size="lg" className="min-w-32">
               <Download className="w-5 h-5 mr-2" />
-              Download Recipe
+              Download
             </Button>
-            <Button onClick={onNewRecording} variant="ghost">
-              Record Another Recipe
+            <Button onClick={onNewRecording} variant="ghost" className="min-w-32">
+              New Recording
             </Button>
           </div>
         </div>
